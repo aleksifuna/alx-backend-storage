@@ -8,7 +8,8 @@ methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
 if __name__ == "__main__":
     client = MongoClient()
     logs_collection = client.logs.nginx
-    print(logs_collection.count_documents({}))
+    total_logs = logs_collection.count_documents({})
+    print(f"{total_logs} logs")
     print('methods:')
     for method in methods:
         count = logs_collection.count_documents({"method": method})
