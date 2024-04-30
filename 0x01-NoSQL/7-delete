@@ -1,2 +1,2 @@
 // deletes all the documents with a specific attrib in collection school
-db.school.remove({name: 'Holberton school'})
+db.school.deleteMany({name: 'Holberton school'})
