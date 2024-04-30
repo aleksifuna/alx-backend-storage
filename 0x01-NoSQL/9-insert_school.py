@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Supplies one function insert_school
 """
