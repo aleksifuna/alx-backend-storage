@@ -3,7 +3,7 @@
 Defination of class Cache
 """
 import redis
-from typing import Union
+from typing import Union, Callable, Optional
 from uuid import uuid4
 
 
@@ -25,3 +25,32 @@ class Cache:
         key = str(uuid4())
         client.set(key, data)
         return key
+
+    def get(self,
+            key: str,
+            fn: Optional[Callable] = None
+            ) -> Union[str, bytes, int, float]:
+        """
+        Get data from the db
+        """
+        value = self._redis.get(key)
+        if fn:
+            value = fn(value)
+        return value
+
+    def get_str(self, key: str) -> str:
+        """
+        Return a string value associated with key in the db
+        """
+        value = self._redis.get(key)
+        return value.decode('utf-8')
+
+    def get_int(self, key: str):
+        """
+        Return a int value associated with key in the db"""
+        value = self._redis.get(key)
+        try:
+            value = int(value.decode('utf-8'))
+        except Exception:
+            value = 0
+        return value
