@@ -44,21 +44,20 @@ def call_history(method: Callable) -> Callable:
 
 
 def replay(method: Callable) -> None:
-    # sourcery skip: use-fstring-for-concatenation, use-fstring-for-formatting
     """
     Replays all method calls
     """
     name = method.__qualname__
     cache = redis.Redis()
-    calls = cache.get(name).decode("utf-8")
+    calls = cache.get(name)
+    calls = calls.decode("utf-8") if calls else 0
     print("{} was called {} times:".format(name, calls))
     inputs = cache.lrange(name + ":inputs", 0, -1)
     outputs = cache.lrange(name + ":outputs", 0, -1)
     for i, o in zip(inputs, outputs):
-        print("{}(*{}) -> {}".format(name,
-                                     i.decode("utf-8"),
-                                     o.decode("utf-8")
-                                     ))
+        i = i.decode("utf-8") if i else ""
+        o = o.decode("utf-8") if o else ""
+        print("{}(*{}) -> {}".format(name, i, o))
 
 
 class Cache:
